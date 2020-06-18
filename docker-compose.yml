@@ -1,0 +1,24 @@
+version: '3'
+services: 
+    web:
+        # . = current work directory (root of your project in your local)
+        build: 
+            # context - especificamos la ruta de nuestro proyecto en este caso el punto indica root
+            context: .
+            dockerfile: Dockerfile.dev
+        ports: 
+            # outside port:inside port   (primero el puerto de tu maquina y despues el puerto del container al que estas mapeando)
+            - "3000:3000"
+        volumes: 
+            - /app/node_modules
+            - .:/app
+    # Container para ejecutar los tests
+    tests:
+        build: 
+            context: .
+            dockerfile: Dockerfile.dev
+        volumes: 
+            - /app/node_modules
+            - .:/app
+        # sobreescribimos los comandos para que ejecute los test
+        command: ["npm", "run", "test"]
